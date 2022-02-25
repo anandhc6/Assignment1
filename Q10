@@ -1,0 +1,23 @@
+from keras.datasets import mnist
+(X_mnist_full, y_mnist_full), (X_test_mnist_full, y_test_mnist_full) = mnist.load_data()
+
+# Reshaping the data 
+X_mnist_full = X_mnist_full.reshape(X_mnist_full.shape[0], 784)
+X_test_mnist_full = X_test_mnist_full.reshape(X_test_mnist_full.shape[0], 784)
+
+# Normalizing
+X_mnist_full = X_mnist_full/255.0
+X_test_mnist_full = X_test_mnist_full/255.0
+
+#layer_dimensions
+la_mnist_full=[784, 256, 256, 256, 256, 10]
+L_mnist_full= len(la_mnist_full)-1
+
+params={}
+
+# Split the data X into a training set and validation set
+X_train_mnist_full, X_val_mnist_full, y_train_mnist_full, y_val_mnist_full = train_test_split(X_mnist_full, y_mnist_full, test_size=0.1, random_state=42)
+
+train_acc_mnist_full,train_loss_mnist_full,val_acc_mnist_full,val_loss_mnist_full= fit(X_mnist_full,y_mnist_full,32,10,0.01,'Xavier','nadam','cross_entropy',0,'tanh',la_mnist_full,L_mnist_full)
+test_acc=accuracy(X_test_mnist_full.T,y_test_mnist_full,params,'tanh')
+print("Accuracy of  test_data= " + str(test_acc))
