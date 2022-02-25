@@ -1,0 +1,25 @@
+def accuracy_conf(x, y,params,activation_para):
+    _,_,yhate=feedforward(x, params,activation_para)
+    yh=np.argmax(yhate,axis=0)
+    return yh
+
+from sklearn.metrics import confusion_matrix
+from matplotlib import pyplot as plt
+import seaborn as sns
+la=[784,256,256,256,256,10]
+L=len(la)-1
+#X,y,batch,epochs,eta,weight_para,optimiser,loss,weight_decay,activation_para,la,L
+train_acc,train_loss,val_acc,val_loss=fit(X,y,16,10,0.001,'Xavier','nadam','cross_entropy',0.0005,'tanh',la,L)
+test_acc_conf=accuracy_conf(X_test.T,y_test,params,'tanh')
+#print("Accuracy of  test_data= " + str(test_acc_conf))
+wandb.init(project='CS6910_Assignment1_Sweep',name='Confusion_matrix')
+conf_matrix = confusion_matrix(y_test, test_acc_conf, normalize='true')
+plt.figure(figsize=(12, 8))
+ax = sns.heatmap(conf_matrix, annot=True)#,xticklabels=class_names, yticklabels=class_names)
+ax.set_title("Confusion Matrix", size=16)
+ax.set_xlabel("True", size=14)
+ax.set_ylabel("Predictions", size=14)
+plt.savefig("Confusion")
+wandb.log({"Confusion matrix":wandb.Image(plt)})
+plt.show()
+wandb.finish()
