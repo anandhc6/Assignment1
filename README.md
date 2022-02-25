@@ -1,55 +1,53 @@
 # Assignment1
 This project uses Object Oriented Programming for modularity.
-The core of this project is the class **NeuralNetworkClassifier** whose constructor can take the following parameters:
 
-1. no_of_neurons - A list which represents the architecture of the neural network. (i.e) number of neurons in each of the hidden layer
-2. n_class - Number of classes
-3. alpha - L2 regularization weight decay parameter. Default value is 0 which means no L2 regularization.
-4. activation - Activation function to be used. Default value is 'sigmoid'.
-5. output - Output function to be used. Default value is 'softmax'
-6. loss - Loss function to be used. Default value is 'cross_entropy'
-7. optimizer - Optimizer to be used. Default is None. Supported optimizers are sgd, momentum, nesterov, rmsprop, adam, nadam
-	
-This class has three useful methods namely fit, predict and accuracy.
+The core of this project is 'fit' function.
 
-## fit(x, y, batch_size=BATCH_SIZE, epochs=100, eta=0.01, weight_initializer = None)
-To train the neural network classifier.
+## fit(X,y,batch,epochs,eta,weight_para,optimiser,loss,weight_decay,activation_para,la)
+
+To train the neural network,
 
 x - training data  
 y - training labels  
-batch_size - batch size used for training  
+batch - batch size used for training  
 epochs - number of epochs until which the model will be trained  
 eta - learning rate  
-weight_initializer - weight initialization method to be used. By default it is None for which weights are initialized randomly. 'Xavier' method is supported.  
+weight_para - weight initialization method to be used. By default it is None for which weights are initialized randomly. 'Xavier' method is supported.  
+optimiser - sgd, momentum, nesterov, rmsprop, adam, nadam
+loss - loss function to be used . cross entropy , squared error loss
+weight_decay - Activation function to be used . sigmoid , relu and tanh functions are supported.
+activation_para - L2 regularization weight decay parameter. Default value is 0 which means no L2 regularization
+la - contains number of neurons , hidden layers , dimension of input features and number of output classes
 
-Returns None
+## yhate=feedforward(x, params,activation_para)
+It will predict the classes for the given data.
 
-## predict(X_test)
-To predict the classes for given data
+X - Data for which the accuracy of the model need to be evaluated
+params - contains weights and biases 
+activation_para - passes the activation to be used
 
-X_test - Data for which predictions are to be made
+It returns an array of predictions
 
-Returns an array of predictions
+## loss_accuracy(x,params,y,t,loss,activation_para, n_class=10)
+To calculate loss and accuracy of the model given some data
 
-## accuracy(X_test, y_test)
-To calculate the accuracy of the model given some data
-
-X_test - Data for which the accuracy of the model need to be evaluated
-
-y_test - Corresponding class labels of the data  
+X - Data for which the accuracy of the model need to be evaluated
+params - contains weights and biases 
+y - Corresponding class labels of the data 
+t - number of epochs
+loss - passes the loss function to be used
+activation_para - passes the activation to be used
+n_class=10 - represents the output classes
 
 Returns the accuracy score
 
 
 ### Example:
 ``` python
-model = nn.NeuralNetworkClassifier([64, 64, 64], 10, alpha = 0.05, optimizer = 'adam')
 
-model.fit(X_trainval, y_trainval, batch_size = 256, epochs = 150, eta = 0.001, 
-          weight_initializer = 'Xavier')
+train_acc,train_loss,val_acc,val_loss=fit(X_train,y_train,batch,epochs,eta,weight_para,optimiser,loss,weight_decay,activation_para,la)
+test_acc=accuracy(X_test.T,y_test,params)
 
-y_predictions = model.predict(X_test)
-acc = model.accuracy(X_test, y_test)
 ```
-
-This example creates a neural network with 3 hidden layers each having 64 neurons with 10 output classes. The model is trained by calling the fit method.
+The "fit" function needs to be called which will fit the required data using the model.
+It returns training accuracy and loss, validation accuracy and loss.
